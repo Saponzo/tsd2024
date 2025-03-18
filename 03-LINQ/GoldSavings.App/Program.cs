@@ -1,6 +1,7 @@
 ﻿using GoldSavings.App.Model;
 using GoldSavings.App.Client;
 using GoldSavings.App.Services;
+using Microsoft.VisualBasic;
 namespace GoldSavings.App;
 
 class Program
@@ -11,8 +12,8 @@ class Program
 
         // Step 1: Get gold prices
         GoldDataService dataService = new GoldDataService();
-        DateTime startDate = new DateTime(2024,09,18);
-        DateTime endDate = DateTime.Now;
+        DateTime startDate = new DateTime(2024,01,01);
+        DateTime endDate = new DateTime(2024,12,31);
         List<GoldPrice> goldPrices = dataService.GetGoldPrices(startDate, endDate).GetAwaiter().GetResult();
 
         if (goldPrices.Count == 0)
@@ -30,7 +31,28 @@ class Program
         // Step 3: Print results
         GoldResultPrinter.PrintSingleValue(Math.Round(avgPrice, 2), "Average Gold Price Last Half Year");
 
+        Console.WriteLine("\n3 higher prices :\n");
+        var higherPrices = goldPrices.OrderByDescending(p => p.Price).Take(3).ToList();
+
+        foreach (var price in higherPrices) {
+            Console.WriteLine($"{price.Price} ");
+        } 
+
+        Console.WriteLine("\n3 lower prices :\n");
+        var lowerPrices = goldPrices.OrderBy(p => p.Price).Take(3).ToList();
+
+        foreach (var price in lowerPrices) {
+            Console.WriteLine($"{price.Price} ");
+        } 
+
+        
+
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
 
     }
 }
+
+// Question 2.a 
+/* 3 Highest : 361.74, 358.35, 357.14
+   3 Lowest : 257.59, 258.4, 258.87
+*/
