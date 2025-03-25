@@ -1,6 +1,7 @@
 ﻿using GoldSavings.App.Model;
 using GoldSavings.App.Client;
 using GoldSavings.App.Services;
+using Microsoft.VisualBasic;
 namespace GoldSavings.App;
 
 class Program
@@ -11,9 +12,15 @@ class Program
 
         // Step 1: Get gold prices
         GoldDataService dataService = new GoldDataService();
-        DateTime startDate = new DateTime(2024,09,18);
-        DateTime endDate = DateTime.Now;
-        List<GoldPrice> goldPrices = dataService.GetGoldPrices(startDate, endDate).GetAwaiter().GetResult();
+
+        List<GoldPrice> goldPrices = new List<GoldPrice>();
+        for (int year = 2019; year <= 2024; year++)
+        {
+            DateTime startDate = new DateTime(year, 01, 01);
+            DateTime endDate = new DateTime(year, 12, 31);
+            var yearlyPrices = dataService.GetGoldPrices(startDate, endDate).GetAwaiter().GetResult();
+            goldPrices.AddRange(yearlyPrices);
+        }
 
         if (goldPrices.Count == 0)
         {
@@ -30,7 +37,74 @@ class Program
         // Step 3: Print results
         GoldResultPrinter.PrintSingleValue(Math.Round(avgPrice, 2), "Average Gold Price Last Half Year");
 
+        List<GoldPrice> higherPrices = analysisService.Get3HighestPricesLastYearQuerry();
+        List<GoldPrice> lowerPrices = analysisService.Get3LowestPricesLastYearQuerry();
+        Console.WriteLine("\n3 higher prices :\n");
+
+        foreach (var price in higherPrices) {
+            Console.WriteLine($"{price.Price} ");
+        } 
+
+        Console.WriteLine("\n3 lower prices :\n");
+
+        foreach (var price in lowerPrices) {
+            Console.WriteLine($"{price.Price} ");
+        } 
+
+        Console.WriteLine("\nNumber of dates with more than 5% gain :\n");
+        var datePrice = analysisService.GetDatesWith5PercentGain();
+        
+        Console.WriteLine($"{datePrice.Count} ");
+
+        Console.WriteLine("\n3 dates :\n");
+
+        var dates = analysisService.Get3DatesOpeningSecondTenPricesRanking();
+        foreach (var date in dates) {
+            Console.WriteLine($"{date.Date} ");
+        } 
+
+        var avgPrice2020 = analysisService.GetAveragePrice2020();
+        var avgPrice2023 = analysisService.GetAveragePrice2023();
+        var avgPrice2024 = analysisService.GetAveragePrice2024();
+
+        Console.WriteLine($"\nAverage Gold Price for 2020: {Math.Round(avgPrice2020, 2)}");
+        Console.WriteLine($"\nAverage Gold Price for 2023: {Math.Round(avgPrice2023, 2)}");
+        Console.WriteLine($"\nAverage Gold Price for 2024: {Math.Round(avgPrice2024, 2)}");
+        
+        var bestBuySellDates = analysisService.GetBestBuySellDates();
+        Console.WriteLine("\nBest Buy and Sell Dates:\n");
+        var buyDate = analysisService.GetBestBuySellDates().BuyDate;
+        var sellDate = analysisService.GetBestBuySellDates().SellDate;
+        var roi = analysisService.GetBestBuySellDates().ReturnOnInvestment;
+        Console.WriteLine($"\nBuy Date: {buyDate}");
+        Console.WriteLine($"\nSell Date: {sellDate}");
+        Console.WriteLine($"\nReturn on Investment: {Math.Round(roi, 2)}");
+
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
+
+        //GoldResultPrinter.SavePricesToXml(goldPrices, "GoldPrices.xml");
+
+        GoldResultPrinter.PrintPrices(GoldResultPrinter.ReadPricesFromXml("GoldPrices.xml"), "Loaded Gold Prices");
 
     }
 }
+
+// Question 2.a 
+/* 3 Highest : 361.74, 358.35, 357.14
+   3 Lowest : 257.59, 258.4, 258.87
+*/
+
+// Question 2.b
+// Yes there is 1224 dates with more than 5% gain if someone bought on January 2020
+
+// Question 2.c
+// 29/04/2022, 20/04/2022, 02/05/2022
+
+// Question 2.d
+// Average Gold Price for 2020: 221.47
+// Average Gold Price for 2023: 262.13
+// Average Gold Price for 2024: 304.86
+
+// Question 2.e
+// Best Buy and Sell Dates: 02/01/2020 and 25/11/2024
+// Return on Investment: 0.95

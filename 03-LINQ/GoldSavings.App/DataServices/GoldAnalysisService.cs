@@ -17,5 +17,163 @@ namespace GoldSavings.App.Services
         {
             return _goldPrices.Average(p => p.Price);
         }
+
+        public List<GoldPrice> Get3HighestPricesLastYearQuerry()
+        {
+            var startDate = new DateTime(2024,01,01);
+            var endDate = new DateTime(2024,12,31);
+            var lastYearPrices = from p in _goldPrices
+                     where p.Date >= startDate && p.Date <= endDate
+                     orderby p.Price descending
+                     select p;
+
+            var highest = lastYearPrices.Take(3).ToList();
+
+            return highest;
+        }
+
+        public List<GoldPrice> Get3HighestPricesLastYear()
+        {
+            var startDate = new DateTime(2024,01,01);
+            var endDate = new DateTime(2024,12,31);
+            var lastYearPrices = _goldPrices.Where(p => p.Date >= startDate).Where(p => p.Date <= endDate).ToList();
+
+            var highest = lastYearPrices.OrderByDescending(p => p.Price).Take(3).ToList();
+            
+
+            return highest;
+        }
+
+        public List<GoldPrice> Get3LowestPricesLastYearQuerry()
+        {
+            var startDate = new DateTime(2024,01,01);
+            var endDate = new DateTime(2024,12,31);
+            var lastYearPrices = from p in _goldPrices
+                     where p.Date >= startDate && p.Date <= endDate
+                     orderby p.Price
+                     select p;
+
+            var lowest = lastYearPrices.Take(3).ToList();
+
+            return lowest;
+        }
+
+
+        public List<GoldPrice> Get3LowestPricesLastYear()
+        {
+            var startDate = new DateTime(2024,01,01);
+            var endDate = new DateTime(2024,12,31);
+            var lastYearPrices = _goldPrices.Where(p => p.Date >= startDate).Where(p => p.Date <= endDate).ToList();
+
+            var lowest = lastYearPrices.OrderBy(p => p.Price).Take(3).ToList();
+            
+
+            return lowest;
+        }
+        
+        public List<DateTime> GetDatesWith5PercentGain()
+        {
+            var startDate = new DateTime(2020, 01, 01);
+            var endDate = new DateTime(2020, 01, 31);
+            var january2020Prices = _goldPrices.Where(p => p.Date >= startDate && p.Date <= endDate).ToList();
+
+            if (!january2020Prices.Any())
+            {
+            return new List<DateTime>();
+            }
+
+            var initialPrice = january2020Prices.Average(p => p.Price);
+            var targetPrice = initialPrice * 1.05;
+
+            var datesWith5PercentGain = _goldPrices.Where(p => p.Price >= targetPrice)
+                               .Select(p => p.Date)
+                               .ToList();
+
+            return datesWith5PercentGain;
+        }
+
+        public List<DateTime> Get3DatesOpeningSecondTenPricesRanking()
+        {
+            var startDate = new DateTime(2019, 01, 01);
+            var endDate = new DateTime(2022, 12, 31);
+            var pricesInRange = _goldPrices.Where(p => p.Date >= startDate && p.Date <= endDate)
+                                           .OrderByDescending(p => p.Price)
+                                           .Skip(10)
+                                           .Take(3)
+                                           .Select(p => p.Date)
+                                           .ToList();
+
+            return pricesInRange;
+        }
+
+        public double GetAveragePrice2020()
+        {
+            var startDate = new DateTime(2020, 01, 01);
+            var endDate = new DateTime(2020, 12, 31);
+            var prices2020 = from p in _goldPrices
+                            where p.Date >= startDate && p.Date <= endDate
+                            select p.Price;
+
+            return prices2020.Average();
+        }
+
+        public double GetAveragePrice2023()
+        {
+            var startDate = new DateTime(2023, 01, 01);
+            var endDate = new DateTime(2023, 12, 31);
+            var prices2023 = from p in _goldPrices
+                            where p.Date >= startDate && p.Date <= endDate
+                            select p.Price;
+
+            return prices2023.Average();
+        }
+
+        public double GetAveragePrice2024()
+        {
+            var startDate = new DateTime(2024, 01, 01);
+            var endDate = new DateTime(2024, 12, 31);
+            var prices2024 = from p in _goldPrices
+                            where p.Date >= startDate && p.Date <= endDate
+                            select p.Price;
+
+            return prices2024.Average();
+        }
+
+        public (DateTime BuyDate, DateTime SellDate, double ReturnOnInvestment) GetBestBuySellDates()
+        {
+            var startDate = new DateTime(2020, 01, 01);
+            var endDate = new DateTime(2024, 12, 31);
+            var pricesInRange = _goldPrices.Where(p => p.Date >= startDate && p.Date <= endDate).OrderBy(p => p.Date).ToList();
+
+            if (!pricesInRange.Any())
+            {
+                return (DateTime.MinValue, DateTime.MinValue, 0);
+            }
+
+            double minPrice = double.MaxValue;
+            double maxProfit = 0;
+            DateTime buyDate = DateTime.MinValue;
+            DateTime sellDate = DateTime.MinValue;
+
+            foreach (var price in pricesInRange)
+            {
+                if (price.Price < minPrice)
+                {
+                    minPrice = price.Price;
+                    buyDate = price.Date;
+                }
+
+                double profit = price.Price - minPrice;
+                if (profit > maxProfit)
+                {
+                    maxProfit = profit;
+                    sellDate = price.Date;
+                }
+            }
+
+            double returnOnInvestment = maxProfit / minPrice;
+
+            return (buyDate, sellDate, returnOnInvestment);
+        }
     }
 }
