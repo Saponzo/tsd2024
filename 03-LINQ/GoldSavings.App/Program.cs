@@ -62,6 +62,14 @@ class Program
         foreach (var date in dates) {
             Console.WriteLine($"{date.Date} ");
         } 
+
+        var avgPrice2020 = analysisService.GetAveragePrice2020();
+        var avgPrice2023 = analysisService.GetAveragePrice2023();
+        var avgPrice2024 = analysisService.GetAveragePrice2024();
+
+        Console.WriteLine($"\nAverage Gold Price for 2020: {Math.Round(avgPrice2020, 2)}");
+        Console.WriteLine($"\nAverage Gold Price for 2023: {Math.Round(avgPrice2023, 2)}");
+        Console.WriteLine($"\nAverage Gold Price for 2024: {Math.Round(avgPrice2024, 2)}");
         
 
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
@@ -79,3 +87,8 @@ class Program
 
 // Question 2.c
 // 29/04/2022, 20/04/2022, 02/05/2022
+
+// Question 2.d
+// Average Gold Price for 2020: 221.47
+// Average Gold Price for 2023: 262.13
+// Average Gold Price for 2024: 304.86

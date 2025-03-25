@@ -105,5 +105,38 @@ namespace GoldSavings.App.Services
 
             return pricesInRange;
         }
+
+        public double GetAveragePrice2020()
+        {
+            var startDate = new DateTime(2020, 01, 01);
+            var endDate = new DateTime(2020, 12, 31);
+            var prices2020 = from p in _goldPrices
+                            where p.Date >= startDate && p.Date <= endDate
+                            select p.Price;
+
+            return prices2020.Average();
+        }
+
+        public double GetAveragePrice2023()
+        {
+            var startDate = new DateTime(2023, 01, 01);
+            var endDate = new DateTime(2023, 12, 31);
+            var prices2023 = from p in _goldPrices
+                            where p.Date >= startDate && p.Date <= endDate
+                            select p.Price;
+
+            return prices2023.Average();
+        }
+
+        public double GetAveragePrice2024()
+        {
+            var startDate = new DateTime(2024, 01, 01);
+            var endDate = new DateTime(2024, 12, 31);
+            var prices2024 = from p in _goldPrices
+                            where p.Date >= startDate && p.Date <= endDate
+                            select p.Price;
+
+            return prices2024.Average();
+        }
     }
 }
