@@ -71,5 +71,24 @@ namespace GoldSavings.App.Services
             return lowest;
         }
         
+        public bool WouldHaveEarnedMoreThan5Percent()
+        {
+            var startDate = new DateTime(2020, 01, 01);
+            var endDate = new DateTime(2020, 01, 31);
+            var january2020Prices = from p in _goldPrices
+                                    where p.Date >= startDate && p.Date <= endDate
+                                    select p.Price;
+
+            if (!january2020Prices.Any())
+            {
+                return false;
+            }
+
+            var initialPrice = january2020Prices.Average();
+
+            var currentPrice = _goldPrices.OrderByDescending(p => p.Date).FirstOrDefault()?.Price ?? 0;
+
+            return currentPrice > initialPrice * 1.05;
+        }
     }
 }

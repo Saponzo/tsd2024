@@ -45,6 +45,8 @@ class Program
             Console.WriteLine($"{price.Price} ");
         } 
 
+        Console.WriteLine($"\n{analysisService.WouldHaveEarnedMoreThan5Percent()}");
+
         
 
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
@@ -56,3 +58,6 @@ class Program
 /* 3 Highest : 361.74, 358.35, 357.14
    3 Lowest : 257.59, 258.4, 258.87
 */
+
+// Question 2.b
+// No there is no date for this increase
