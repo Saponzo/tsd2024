@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using GoldSavings.App.Model;
 
 namespace GoldSavings.App.Services
@@ -34,5 +35,9 @@ namespace GoldSavings.App.Services
 
             xml.Save(filePath);
         }
+
+        public static List<GoldPrice> ReadPricesFromXml(string filePath) =>
+            File.Exists(filePath) ? (new XmlSerializer(typeof(List<GoldPrice>)).Deserialize(new StreamReader(filePath)) as List<GoldPrice>) ?? new List<GoldPrice>() : new List<GoldPrice>();
+        
     }
 }
