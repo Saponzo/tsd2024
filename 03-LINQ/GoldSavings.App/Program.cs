@@ -82,6 +82,8 @@ class Program
 
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
 
+        GoldResultPrinter.SavePricesToXml(goldPrices, "GoldPrices.xml");
+
     }
 }
 
