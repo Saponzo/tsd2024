@@ -31,15 +31,15 @@ class Program
         // Step 3: Print results
         GoldResultPrinter.PrintSingleValue(Math.Round(avgPrice, 2), "Average Gold Price Last Half Year");
 
+        List<GoldPrice> higherPrices = analysisService.Get3HighestPricesLastYearQuerry();
+        List<GoldPrice> lowerPrices = analysisService.Get3LowestPricesLastYearQuerry();
         Console.WriteLine("\n3 higher prices :\n");
-        var higherPrices = goldPrices.OrderByDescending(p => p.Price).Take(3).ToList();
 
         foreach (var price in higherPrices) {
             Console.WriteLine($"{price.Price} ");
         } 
 
         Console.WriteLine("\n3 lower prices :\n");
-        var lowerPrices = goldPrices.OrderBy(p => p.Price).Take(3).ToList();
 
         foreach (var price in lowerPrices) {
             Console.WriteLine($"{price.Price} ");

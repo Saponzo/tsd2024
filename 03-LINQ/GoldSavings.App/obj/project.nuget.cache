@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "P88COvKW7qmQO0YlL3SS2jYkIu1P3AEXC/S0ovnZGW3HWALu3FQlPDHxgkX+luuojUc3A+rINlg3PoZUJHZOTQ==",
+  "dgSpecHash": "tvrdVaW6qFY=",
   "success": true,
-  "projectFilePath": "/home/samuel/Desktop/Sam/Documents/Cours/zz2/S8_Poznan/tsd2024/03-LINQ/GoldSavings.App/GoldSavings.App.csproj",
+  "projectFilePath": "/home/sam/Documents/Cours/Poznan/tsd2024/03-LINQ/GoldSavings.App/GoldSavings.App.csproj",
   "expectedPackageFiles": [
-    "/home/samuel/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512"
+    "/home/sam/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
+    "/home/sam/.nuget/packages/microsoft.netcore.app.ref/8.0.13/microsoft.netcore.app.ref.8.0.13.nupkg.sha512",
+    "/home/sam/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.13/microsoft.aspnetcore.app.ref.8.0.13.nupkg.sha512",
+    "/home/sam/.nuget/packages/microsoft.netcore.app.host.linux-x64/8.0.13/microsoft.netcore.app.host.linux-x64.8.0.13.nupkg.sha512"
   ],
   "logs": []
 }
