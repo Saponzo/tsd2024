@@ -138,5 +138,42 @@ namespace GoldSavings.App.Services
 
             return prices2024.Average();
         }
+
+        public (DateTime BuyDate, DateTime SellDate, double ReturnOnInvestment) GetBestBuySellDates()
+        {
+            var startDate = new DateTime(2020, 01, 01);
+            var endDate = new DateTime(2024, 12, 31);
+            var pricesInRange = _goldPrices.Where(p => p.Date >= startDate && p.Date <= endDate).OrderBy(p => p.Date).ToList();
+
+            if (!pricesInRange.Any())
+            {
+                return (DateTime.MinValue, DateTime.MinValue, 0);
+            }
+
+            double minPrice = double.MaxValue;
+            double maxProfit = 0;
+            DateTime buyDate = DateTime.MinValue;
+            DateTime sellDate = DateTime.MinValue;
+
+            foreach (var price in pricesInRange)
+            {
+                if (price.Price < minPrice)
+                {
+                    minPrice = price.Price;
+                    buyDate = price.Date;
+                }
+
+                double profit = price.Price - minPrice;
+                if (profit > maxProfit)
+                {
+                    maxProfit = profit;
+                    sellDate = price.Date;
+                }
+            }
+
+            double returnOnInvestment = maxProfit / minPrice;
+
+            return (buyDate, sellDate, returnOnInvestment);
+        }
     }
 }

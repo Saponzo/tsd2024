@@ -71,6 +71,14 @@ class Program
         Console.WriteLine($"\nAverage Gold Price for 2023: {Math.Round(avgPrice2023, 2)}");
         Console.WriteLine($"\nAverage Gold Price for 2024: {Math.Round(avgPrice2024, 2)}");
         
+        var bestBuySellDates = analysisService.GetBestBuySellDates();
+        Console.WriteLine("\nBest Buy and Sell Dates:\n");
+        var buyDate = analysisService.GetBestBuySellDates().BuyDate;
+        var sellDate = analysisService.GetBestBuySellDates().SellDate;
+        var roi = analysisService.GetBestBuySellDates().ReturnOnInvestment;
+        Console.WriteLine($"\nBuy Date: {buyDate}");
+        Console.WriteLine($"\nSell Date: {sellDate}");
+        Console.WriteLine($"\nReturn on Investment: {Math.Round(roi, 2)}");
 
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
 
@@ -92,3 +100,7 @@ class Program
 // Average Gold Price for 2020: 221.47
 // Average Gold Price for 2023: 262.13
 // Average Gold Price for 2024: 304.86
+
+// Question 2.e
+// Best Buy and Sell Dates: 02/01/2020 and 25/11/2024
+// Return on Investment: 0.95
