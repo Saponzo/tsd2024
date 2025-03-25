@@ -71,24 +71,39 @@ namespace GoldSavings.App.Services
             return lowest;
         }
         
-        public bool WouldHaveEarnedMoreThan5Percent()
+        public List<DateTime> GetDatesWith5PercentGain()
         {
             var startDate = new DateTime(2020, 01, 01);
             var endDate = new DateTime(2020, 01, 31);
-            var january2020Prices = from p in _goldPrices
-                                    where p.Date >= startDate && p.Date <= endDate
-                                    select p.Price;
+            var january2020Prices = _goldPrices.Where(p => p.Date >= startDate && p.Date <= endDate).ToList();
 
             if (!january2020Prices.Any())
             {
-                return false;
+            return new List<DateTime>();
             }
 
-            var initialPrice = january2020Prices.Average();
+            var initialPrice = january2020Prices.Average(p => p.Price);
+            var targetPrice = initialPrice * 1.05;
 
-            var currentPrice = _goldPrices.OrderByDescending(p => p.Date).FirstOrDefault()?.Price ?? 0;
+            var datesWith5PercentGain = _goldPrices.Where(p => p.Price >= targetPrice)
+                               .Select(p => p.Date)
+                               .ToList();
 
-            return currentPrice > initialPrice * 1.05;
+            return datesWith5PercentGain;
+        }
+
+        public List<DateTime> Get3DatesOpeningSecondTenPricesRanking()
+        {
+            var startDate = new DateTime(2019, 01, 01);
+            var endDate = new DateTime(2022, 12, 31);
+            var pricesInRange = _goldPrices.Where(p => p.Date >= startDate && p.Date <= endDate)
+                                           .OrderByDescending(p => p.Price)
+                                           .Skip(10)
+                                           .Take(3)
+                                           .Select(p => p.Date)
+                                           .ToList();
+
+            return pricesInRange;
         }
     }
 }

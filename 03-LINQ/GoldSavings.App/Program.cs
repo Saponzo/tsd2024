@@ -12,9 +12,15 @@ class Program
 
         // Step 1: Get gold prices
         GoldDataService dataService = new GoldDataService();
-        DateTime startDate = new DateTime(2024,01,01);
-        DateTime endDate = new DateTime(2024,12,31);
-        List<GoldPrice> goldPrices = dataService.GetGoldPrices(startDate, endDate).GetAwaiter().GetResult();
+
+        List<GoldPrice> goldPrices = new List<GoldPrice>();
+        for (int year = 2019; year <= 2024; year++)
+        {
+            DateTime startDate = new DateTime(year, 01, 01);
+            DateTime endDate = new DateTime(year, 12, 31);
+            var yearlyPrices = dataService.GetGoldPrices(startDate, endDate).GetAwaiter().GetResult();
+            goldPrices.AddRange(yearlyPrices);
+        }
 
         if (goldPrices.Count == 0)
         {
@@ -45,8 +51,17 @@ class Program
             Console.WriteLine($"{price.Price} ");
         } 
 
-        Console.WriteLine($"\n{analysisService.WouldHaveEarnedMoreThan5Percent()}");
+        Console.WriteLine("\nNumber of dates with more than 5% gain :\n");
+        var datePrice = analysisService.GetDatesWith5PercentGain();
+        
+        Console.WriteLine($"{datePrice.Count} ");
 
+        Console.WriteLine("\n3 dates :\n");
+
+        var dates = analysisService.Get3DatesOpeningSecondTenPricesRanking();
+        foreach (var date in dates) {
+            Console.WriteLine($"{date.Date} ");
+        } 
         
 
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
@@ -60,4 +75,7 @@ class Program
 */
 
 // Question 2.b
-// No there is no date for this increase
+// Yes there is 1224 dates with more than 5% gain if someone bought on January 2020
+
+// Question 2.c
+// 29/04/2022, 20/04/2022, 02/05/2022
